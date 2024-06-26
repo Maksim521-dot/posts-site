@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}Список чатов{% endblock %}
+
+{% block content %}
+{% if not ban_user %}
+<hr>
+<h2 class="impact card_2" style="margin: auto;"><p>Всего чатов: {{ counter }}</p><h2>
+<div class="card-container button">
+    {% for chat in list_global %}
+        <div class="card_1" style="background-color: #546E7A">
+                {% if chat.user1 == request.user %}
+                <h2 class="impact">Чат с {{ chat.user2 }}</h2>
+                <hr>
+                <h2 class="button">Новых сообщений нет...</h2>
+                <hr>
+                <form method="post" action="{% url 'posts:chat' chat.user2 %}">
+                    {% csrf_token %}
+                    <button method="post" class="button button_3">открыть чат</button>
+                </form>
+                {% else %}
+                <h2 class="impact">Чат с {{ chat.user1 }}</h2>
+                <hr>
+                <h2 class="button">Есть новые сообщения:</h2>
+                <br>
+                <div style="border: 2px solid gray; padding: 5px; text-align: left; background-color: #607D8B; border-radius: 10px;">
+                    <h2 style="color: #BDBDBD;">{{ chat.user1 }}</h2>
+                    <hr>
+                    <h2 class="button" style="color: #BDBDBD;">{{ chat.message }}</h2>
+                </div>
+                <hr>
+                <form method="post" action="{% url 'posts:chat' chat.user1 %}">
+                    {% csrf_token %}
+                    <button method="post" class="button button_3">открыть чат</button>
+                </form>
+                {% endif %}
+        </div>
+        {% if forloop.counter|divisibleby:1 or forloop.last %}
+            </div><div class="card-container button">
+        {% endif %}
+    {% endfor %}
+    {% include 'includes/paginator.html' %}
+</div>
+{% else %}
+{% include "includes/ban_info.html" %}
+{% endif %}
+{% endblock %}

@@ -1,0 +1,148 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        {% include "includes/head.html" %}
+        <title>{% block title %}{% endblock %}</title>
+    </head>
+    <header>{% include "includes/header.html" %}</header>
+    <style>
+        .impact {
+            font-family: 'Impact'; {% comment %} Minecraft Evenings (by Yaconts) {% endcomment %}
+            font-size: 27px;
+            color: #E0E0E0;
+        }
+        .button {
+            font-family: 'Georgia';
+            font-size: 20px;
+            color: #E0E0E0;
+        }
+        .name {
+            font-family: 'Minecraft Evenings (by Yaconts)';
+            font-size: 27px;
+            color: #E0E0E0;
+        }
+        .card_1 {
+            background-color: #546E7A;
+            border: 0px solid #666666;
+            box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.5);
+            border-radius: 5px;
+            padding: 15px;
+            text-align: center;
+            width: calc(20.33% - 20px); /* 33.33% для равного распределения и вычет 20px для отступов */
+            box-sizing: border-box; /* Учесть padding и border при расчете ширины */
+            margin-top: 5px; /* Отступ между карточками */
+            margin-left: auto;
+            margin-right: auto;
+            width: 50em
+        }
+        .card_2 {
+            background-color: #546E7A;
+            border: 0px solid #ccc;
+            box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.5);
+            border-radius: 5px;
+            padding: 15px;
+            text-align: center;
+            width: calc(50.33% - 20px); /* 33.33% для равного распределения и вычет 20px для отступов */
+            box-sizing: border-box; /* Учесть padding и border при расчете ширины */
+            margin-top: 5px; /* Отступ между карточками */
+            margin-left: 65px;
+            margin-right: 65px;
+        }
+        .card-container {
+            display: flex;
+            justify-content: space-between;
+            text-align: center; 
+            padding: 20px; /* Дополнительный отступ от краев */
+        }
+        .button_2 {
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            background-color: gray;
+            width: calc(10.33% - 30px);
+            padding: 5px;
+        }
+        .button_2:hover {
+            background-color: #9E9E9E;
+        }
+        .button_3 {
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.5);
+            background-color: gray;
+            width: calc(27.33% - 30px);
+            padding: 5px;
+        }
+        .button_3:hover {
+            background-color: #9E9E9E;
+        }
+        .center {
+            margin: 10px;
+            display: block;
+        }
+        input {
+            transition: all 0.30s ease-in-out;
+            -webkit-transition: all 0.30s ease-in-out;
+            -moz-transition: all 0.30s ease-in-out;
+            outline:none;
+        }
+        input:focus {
+            border:#35a5e5 1px solid;
+            box-shadow: 0 0 5px rgba(81, 203, 238, 1);
+            -webkit-box-shadow: 0 0 5px rgba(81, 203, 238, 1);
+            -moz-box-shadow: 0 0 5px rgba(81, 203, 238, 1);
+        }
+        .truncate-text {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .button_like {
+            background-color: #546E7A;
+            border: 0px solid #ccc;
+            margin-left: 850px;
+            margin-right: 0px;
+        }
+        .button_subs {
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.5);
+            background-color: #FF6666;
+            color: white;
+            width: calc(30.33% - 30px);
+            padding: 5px;
+        }
+        .button_subs:hover {
+            background-color: #FF0000;
+        }
+        form input[type="text"], form textarea, form select {
+            background-color: #78909C; /* Установка светло-голубого цвета фона для всех полей ввода текста и выпадающих списков в форме */
+            color: white; /* Цвет текста в полях */
+        }
+        .img {
+            max-width: 12%; /* Максимальная ширина изображения не будет превышать 100% ширины родительского элемента */
+            max-height: 100px;
+            border-radius: 50%;
+        }
+        .author {
+            background-color: #546E7A; 
+            border: 0px solid #ccc
+        }
+        .rank {
+            border-radius: 3px;
+            border: 1px solid gray;
+            box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.5);
+            background-color: #004D40;
+            width: calc(20.33% - 30px);
+            padding: 5px;
+            color: yellow;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+    <body style="background-color: #263238">
+        {% block content %}{% endblock %}
+        <script src="" async defer></script>
+    </body>
+    <footer class="border-top text-center py-3">{% include "includes/footer.html" %}</footer>
+</html>

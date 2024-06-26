@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}Поиск{% endblock %}
+
+{% block content %}
+{% load tz %}
+{% if not ban_user %}
+<br>
+<div class="card_1 button input">
+    <form method="post" action="{% url "posts:search" %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="button button_3">Найти</button>
+    </form>
+</div>
+<div class="card-container button">
+    {% if search_obj != "Ничего не найдено" %}
+    {% for post in search_obj %}
+        <div class="card_1">
+          {% if post.user == request.user %}
+          <div style="display: flex; justify-content: space-between;">
+            <form method="post" action="{% url 'posts:post_edit' post.pk %}">
+                {% csrf_token %}
+                <button type="submit" class="button button_like">⚙️</button>
+            </form>
+            
+            <form method="post" action="{% url 'posts:post_delete' pk=post.pk %}">
+                {% csrf_token %}
+                <button type="submit" class="button button_like" style="margin-left: -100px;">🗑️</button>
+            </form>
+          </div>
+        {% endif %}
+            <h2 class="impact">{{ post.name }}</h2>
+            <front size="4">{{ post.text }}</front>
+            <hr>
+            <img class="card-img my-2" src="{{ post.img }}">
+            <hr>
+            <p>Автор: {{ post.user }}</p>
+            <form method="post" action="{% url 'posts:post_detail' post.pk %}">
+                {% csrf_token %}
+                <button method="post" class="button button_3">Подробнее...</button>
+            </form>
+            <br>
+            {% timezone "Europe/Moscow" %}
+            <p class="button_like" style="color: #BDBDBD; font-size: 15px;">{{ post.date|date:"d.m.Y H:i" }}</p>
+            {% endtimezone %}
+        </div>
+        {% if forloop.counter|divisibleby:1 or forloop.last %}
+            </div><div class="card-container button">
+        {% endif %}
+    {% endfor %}
+    {% endif %}
+    {% include 'includes/paginator.html' %}
+</div>
+{% else %}
+{% include "includes/ban_info.html" %}
+{% endif %}
+{% endblock %}

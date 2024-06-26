@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Блокировка {{ ban_user }}{% endblock %}
+
+{% block content %}
+<hr>
+{% if request.user.is_superuser %}
+<div class="card-container impact">
+        <div class="card_1 button input">
+            <h2 class="impact">Блокировка пользователя {{ ban_user }}</h2>
+            <form method="post" action="{% url 'posts:ban' user=ban_user %}">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button method="post" class="button button_3">Заблокировать</button>
+            </form>
+        </div>
+</div>
+{% else %}
+<h2 class="impact card_1">ВЫ НЕ МОЖЕТЕ ЭТОГО ДЕЛАТЬ</h2>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,92 @@
+{% load static %}
+
+
+  <nav class="navbar navbar-light" style="background-color: #546E7A">
+    <div class="container">
+      <div class="name">
+      {% if request.user.is_authenticated %}
+      <a class="navbar-brand" href="{% url 'posts:index' %}">
+        <span style="color: white"><font size="6">SITE</font></span>
+      </a>
+      {% else %}
+      <a class="navbar-brand" href="/">
+        <span style="color: white"><font size="6">SITE</font></span>
+      </a>
+      {% endif  %}
+      </div>
+      {# Добавлено в спринте #}
+
+      {% comment %}
+      Меню - список пунктов со стандартными классами Bootsrap.
+      Класс nav-pills нужен для выделения активных пунктов 
+      {% endcomment %}
+      <ul class="nav nav-pills">
+        {% with request.resolver_match.view_name as view_name %}  
+        <!-- Прочий код не показан -->
+        <li class="nav-item">
+          <a class="button nav-link link-light {% if view_name  == 'posts:search' %}active{% endif %}" 
+             href="{% url 'posts:search' %}">
+             <font size="2">Поиск</font>
+          </a>
+        </li>
+        {% if request.user.is_authenticated %}
+        {% if user.is_superuser %}
+        <li class="nav-item">
+          <a class="button nav-link link-light {% if view_name  == 'admin:index' %}active{% endif %}" 
+             href="{% url 'admin:index' %}">
+             <font size="2">Админ панель</font>
+          </a>
+        </li>
+        {% endif %}
+        <li class="nav-item">
+          <form method="post" action="/post_create/">
+            {% csrf_token %}
+            <button class="button nav-link link-light {% if view_name  == 'posts:post_create' %}active{% endif %}" style="margin: auto; font-size: 13px; padding-top: 16px;">Новый пост</button>
+          </form>
+        </li>
+        <li class="nav-item">
+          <a class="button nav-link link-light {% if view_name  == 'posts:follow_list' %}active{% endif %}" 
+             href="{% url 'posts:follow_list' %}">
+             <font size="2">Подписки</font>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="button nav-link link-light {% if view_name  == 'posts:chat_list' %}active{% endif %}" 
+             href="{% url 'posts:chat_list' %}">
+             <font size="2">Чаты</font>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="button nav-link link-light {% if view_name  == 'posts:my_posts' %}active{% endif %}" 
+             href="{% url 'posts:my_posts' %}">
+             <font size="2">Мои публикации</font>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="button nav-link link-light {% if view_name  == 'users:password_change' %}active{% endif %}" 
+             href="{% url 'users:password_change' %}">
+             <font size="2">Изменить пароль</font>
+          </a>
+        </li>
+          <li class="nav-item">
+            <a class="button nav-link link-light {% if view_name  == 'users:logout' %}active{% endif %}"
+               href="{% url 'users:logout' %}">
+               <font size="2">Выйти</font>
+            </a>
+        {% else %}
+        <li class="nav-item">              
+            <a class=" button nav-link link-light {% if view_name  == 'users:login' %}active{% endif %}" 
+              href="{% url 'users:login' %}">
+              <font size="2">Войти</font>
+            </a>
+        </li>
+        <li class="nav-item">              
+            <a class="button nav-link link-light {% if view_name  == 'users:signup' %}active{% endif %}" 
+               href="{% url 'users:signup' %}">
+               <font size="2">Регистрация</font>
+            </a>
+        </li>
+        {% endif %}
+        {% endwith %}
+    </div>
+  </nav>

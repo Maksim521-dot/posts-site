@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Создание поста{% endblock %}
+
+{% block content %}
+{% if request.user.is_authenticated %}
+{% if not ban_user %}
+{% if not mute_user %}
+<div class="card-container impact">
+        <div class="card_1 button input">
+            <h2 class="impact">НОВЫЙ ПОСТ</h2>
+            <form method="post" action="{% url 'posts:post_create' %}">
+                {% csrf_token %}
+                    {{ form.as_p }}
+                <button method="post" class="button button_3">Опубликовать</button>
+            </form>
+        </div>
+</div>
+{% else %}
+{% include "includes/mute_info.html" %}
+{% endif %}
+{% else %}
+{% include "includes/ban_info.html" %}
+{% endif %}
+{% else %}
+<h2 class="impact card_1">ЗАРЕГИСТРИРУЙТЕСЬ</h2>
+{% endif %}
+{% endblock %}

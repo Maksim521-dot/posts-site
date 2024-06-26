@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}Чат{% endblock %}
+
+{% block content %}
+{% load tz %}
+<hr>
+<div class="card_1 button input">
+    <h2 class="impact">Чат с {{ user2_obj }}</h2>
+    <form method="post" action="{% url "posts:chat" user2=user2_obj %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="button button_3">Отправить</button>
+    </form>
+</div>
+<hr>
+{% timezone "Europe/Moscow" %}
+<div class="card-container button">
+    <div class="card_1 button">
+    {% for chat_obj in chat_message_all %}
+        {% if chat_obj.user1 == request.user %}
+        <div style="padding: 5px; text-align: right;">
+            {% if current_date == chat_obj.date %}
+                <p class="button" style="color: #BDBDBD; font-size: 15px;">сегодня<p>
+            {% else %}
+                <p class="button" style="color: #BDBDBD; font-size: 15px;">{{ chat_obj.date|date:"d.m.Y" }}<p>
+            {% endif %}
+            <h2 class="author button"><img class="card-img my-2 img" style="max-width: 3%;" src="{{ img_obj_1 }}"> {{ request.user }}</h2>
+            <h2 class="button">{{ chat_obj.message }}</h2>
+        <form method="post" action="{% url "posts:chat_message_delete" msg_pk=chat_obj.id %}">
+            {% csrf_token %}
+            <button class="button button_like">🗑️</button>
+        </form>
+        <hr>
+        </div>
+        {% else %}
+        <div style="padding: 5px; text-align: left;">
+            {% if current_date == chat_obj.date %}
+                <p class="button" style="color: #BDBDBD; font-size: 15px;">сегодня<p>
+            {% else %}
+                <p class="button" style="color: #BDBDBD; font-size: 15px;">{{ chat_obj.date|date:"d.m.Y" }}<p>
+            {% endif %}
+            <h2 class="author button"><img class="card-img my-2 img" style="max-width: 3%;" src="{{ img_obj_2 }}"> {{ chat_obj.user1 }}</h2>
+            <h2 class="button" style="text-align: left;">{{ chat_obj.message }}</h2>
+            <hr>
+        </div>
+        {% endif %}
+    {% endfor %}
+</div>
+</div>
+{% endtimezone %}
+{% endblock %}

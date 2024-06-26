@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Мои подписки{% endblock %}
+
+{% block content %}
+{% if not ban_user %}
+<hr>
+<h2 class="impact card_2" style="margin: auto;"><p>Всего подписок: {{ counter }}</p><h2>
+<div class="card-container button">
+    {% for subs in list %}
+        <div class="card_1">
+            <h2 class="impact">{{ subs.author }}</h2>
+            <form method="post" action="{% url 'posts:post_author' subs.author %}">
+                {% csrf_token %}
+                <button method="post" class="button button_3">Перейти на страницу</button>
+            </form>
+        </div>
+        {% if forloop.counter|divisibleby:1 or forloop.last %}
+            </div><div class="card-container button">
+        {% endif %}
+    {% endfor %}
+    {% include 'includes/paginator.html' %}
+</div>
+{% else %}
+{% include "includes/ban_info.html" %}
+{% endif %}
+{% endblock %}

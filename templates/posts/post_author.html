@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% block title %}Посты - {{ user_post }}{% endblock %}
+
+{% block content %}
+{% load tz %}
+<hr>
+<h2 class="impact card_2" style="margin: auto;"><p>Всего постов: {{ counter }}</p><img class="card-img my-2 img" src="{{ img_obj }}"><p class="button">{{ user_post }}</p><p class="button">{{ counter_follow }} подписчиков</p>
+    <p class="button">Звание: {{ rank_obj.rank }}</p><p class="rank button">{{ rank_obj.rank_img }}</p>
+    {% if request.user.is_superuser %}
+    {% if not ban_user %}
+    <div>
+    <br>
+        <form method="post" action="{% url 'posts:ban' user=user_post %}">
+            {% csrf_token %}
+            <h4 class="button_like button" style="margin-left: 700px;">Блокировка:</h4><button method="post" class="button button_like">◻</button>
+        </form>
+    </div>
+    {% else %}
+    <div>
+        <br>
+            <form method="post" action="{% url 'posts:ban' user=user_post %}">
+                {% csrf_token %}
+                <h4 class="button_like button" style="margin-left: 700px;">Блокировка:</h4><button method="post" class="button button_like">🗹</button>
+            </form>
+        </div>
+    {% endif %}
+    {% if not mute_user %}
+    <div>
+    <br>
+        <form method="post" action="{% url 'posts:mute' user=user_post %}">
+            {% csrf_token %}
+            <h4 class="button_like button" style="margin-left: 700px;">Огр. постов:</h4><button method="post" class="button button_like">◻</button>
+        </form>
+    </div>
+    {% else %}
+    <div>
+        <br>
+            <form method="post" action="{% url 'posts:mute' user=user_post %}">
+                {% csrf_token %}
+                <h4 class="button_like button" style="margin-left: 700px;">Огр. постов:</h4><button method="post" class="button button_like">🗹</button>
+            </form>
+        </div>
+    {% endif %}
+    {% endif %}
+        {% if not follow_exist %}
+        <div>
+        <form method="post" action="{% url 'posts:follow' user=user_post %}">
+            {% csrf_token %}
+            <button method="post" class="button button_subs">Подписаться</button>
+        </form>
+        </div>
+        {% else %}
+        <div>
+        <form method="post" action="{% url 'posts:follow' user=user_post %}">
+            {% csrf_token %}
+            <button method="post" class="button button_3">Отписаться</button>
+        </form>
+        </div>
+        {% endif %}
+        <div>
+        <br>
+            <form method="post" action="{% url 'posts:chat' user2=user_post %}">
+                {% csrf_token %}
+                <button method="post" class="button button_3">Написать</button>
+            </form>
+        </div>
+</h2>
+<div class="card-container button">
+    {% for post in posts %}
+        <div class="card_1">
+            {% if post.user == request.user %}
+            <div style="display: flex; justify-content: space-between;">
+                <form method="post" action="{% url 'posts:post_edit' post.pk %}">
+                    {% csrf_token %}
+                    <button type="submit" class="button button_like">⚙️</button>
+                </form>
+                
+                <form method="post" action="{% url 'posts:post_delete' pk=post.pk %}">
+                    {% csrf_token %}
+                    <button type="submit" class="button button_like" style="margin-left: -100px;">🗑️</button>
+                </form>
+              </div>
+            {% endif %}
+            <h2 class="impact">{{ post.name }}</h2>
+            <front size="4">{{ post.text }}</front>
+            <hr>
+            <img class="card-img my-2" src="{{ post.img }}">
+            <hr>
+            <p>Автор: {{ post.user }}</p>
+            <form method="post" action="{% url 'posts:post_detail' post.pk %}">
+                {% csrf_token %}
+                <button method="post" class="button button_3">Подробнее...</button>
+            </form>
+            <br>
+            {% timezone "Europe/Moscow" %}
+            <p class="button_like" style="color: #BDBDBD; font-size: 15px;">{{ post.date|date:"d.m.Y H:i" }}</p>
+            {% endtimezone %}
+        </div>
+        {% if forloop.counter|divisibleby:1 or forloop.last %}
+            </div><div class="card-container button">
+        {% endif %}
+    {% endfor %}
+    {% include 'includes/paginator.html' %}
+</div>
+{% endblock %}

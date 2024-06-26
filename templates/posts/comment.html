@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Создание комментария{% endblock %}
+
+{% block content %}
+<hr>
+{% if request.user.is_authenticated %}
+<div class="card-container impact">
+        <div class="card_1 button input">
+            <h2 class="impact">НОВЫЙ КОММЕНТАРИЙ</h2>
+            <form method="post" action="{% url 'posts:comments' post.id %}">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button method="post" class="button button_3">Опубликовать</button>
+            </form>
+        </div>
+</div>
+{% else %}
+<h2 class="impact card_1">ЗАРЕГИСТРИРУЙТЕСЬ</h2>
+{% endif %}
+{% endblock %}

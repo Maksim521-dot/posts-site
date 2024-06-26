@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}Пост - {{ post.pk }}{% endblock %}
+
+{% block content %}
+{% load tz %}
+<div class="card-container button">
+        <div class="card_1">
+          <div>
+            {% if request.user.is_authenticated %}
+              {% if comment_exist %}
+              <form method="post" action="{% url 'posts:like' post.id %}">
+                  {% csrf_token %}
+                  <button type="submit" class="button button_like" style="color: red;">❤ {{ like_counter }}</button>
+              </form>
+              {% else %}
+              <form method="post" action="{% url 'posts:like' post.id %}">
+                {% csrf_token %}
+                <button type="submit" class="button button_like">🤍 {{ like_counter }}</button>
+              </form>
+              {% endif %}
+            {% else %}
+            <p type="submit" class="button button_like">🤍 {{ like_counter }}</p>
+            {% endif %}
+        </div>
+            <h2 class="impact">{{ post.name }}</h2>
+            <front size="4">{{ post.text }}</front>
+            <hr>
+            <img class="card-img my-2" src="{{ post.img }}">
+            <form method="post" action="{% url "posts:post_author" post.user %}">
+              {% csrf_token %}
+              <button type="submit" class="author" style="margin-left: -670px; margin-right: 65px"><img class="card-img my-2 img" src="{{ img_obj }}"> {{ post.user }}</button>
+          </form>
+          {% timezone "Europe/Moscow" %}
+          <p class="button_like" style="color: #BDBDBD; font-size: 15px;">{{ post.date|date:"d.m.Y H:i" }}</p>
+          {% endtimezone %}
+          <div>
+              <form method="post" action="{% url 'posts:comments' post.id %}">
+                  {% csrf_token %}
+                  <button type="submit" class="button button_like">💬</button>
+              </form>
+          </div>
+                </div>
+              </div>
+              <hr>
+          {% for comment in comments %}
+          <div class="card_1 button">
+              <form method="post" action="{% url "posts:post_author" comment.user %}">
+                {% csrf_token %}
+                <button type="submit" class="author" style="margin-left: -700px; margin-right: 50px;"> {{ comment.user }}</button>
+            </form>
+            <hr>
+            {{ comment.text }}
+            {% if user == comment.user %}
+            <div>
+              <form method="post" action="{% url 'posts:delete_comments' pk=comment.id post_id=post.id %}">
+                  {% csrf_token %}
+                  <button type="submit" class="button button_like">🚫</button>
+              </form>
+            </div>
+            {% endif %}
+          </div>
+          {% if forloop.counter|divisibleby:1 or forloop.last %}
+          </div><div class="card-container button">
+          {% endif %}
+          {% endfor %}
+    </div>
+{% endblock %}

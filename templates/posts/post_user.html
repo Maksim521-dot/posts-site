@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}Мои посты{% endblock %}
+
+{% block content %}
+{% load tz %}
+{% if not ban_user %}
+<hr>
+<h2 class="impact card_2" style="margin: auto;"><p>Посты пользователя: </p><img class="card-img my-2 img" src="{{ img_obj }}"><p class="button">{{ request.user }}</p>
+<form method="post" action="{% url 'posts:image_profile' request.user %}">
+    {% csrf_token %}
+    <button type="submit" class="button button_3">Установить фото профиля</button>
+</form>
+</h2>
+<div class="card-container button">
+    {% for post in my_posts %}
+        <div class="card_1">
+          {% if post.user == request.user %}
+          <div style="display: flex; justify-content: space-between;">
+            <form method="post" action="{% url 'posts:post_edit' post.pk %}">
+                {% csrf_token %}
+                <button type="submit" class="button button_like">⚙️</button>
+            </form>
+            
+            <form method="post" action="{% url 'posts:post_delete' pk=post.pk %}">
+                {% csrf_token %}
+                <button type="submit" class="button button_like" style="margin-left: -100px;">🗑️</button>
+            </form>
+          </div>
+        {% endif %}
+            <h3 class="impact">{{ post.name }}</h3>
+            <front size="4">{{ post.text }}</front>
+            <img class="card-img my-2" src="{{ post.img }}">
+            <br>
+            {% timezone "Europe/Moscow" %}
+            <p class="button_like" style="color: #BDBDBD; font-size: 15px;">{{ post.date|date:"d.m.Y H:i" }}</p>
+            {% endtimezone %}
+        </div>
+        {% if forloop.counter|divisibleby:1 or forloop.last %}
+            </div><div class="card-container button">
+        {% endif %}
+    {% endfor %}
+</div>
+{% else %}
+{% include "includes/ban_info.html" %}
+{% endif %}
+{% endblock %}

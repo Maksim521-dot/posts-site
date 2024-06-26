@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}Создание поста{% endblock %}
+
+{% block content %}
+{% load tz %}
+<div class="card-container button">
+    {% for post in page_obj %}
+        <div class="card_1">
+            {% if post.user == request.user %}
+            <div style="display: flex; justify-content: space-between;">
+                <form method="post" action="{% url 'posts:post_edit' post.pk %}">
+                    {% csrf_token %}
+                    <button type="submit" class="button button_like">⚙️</button>
+                </form>
+                
+                <form method="post" action="{% url 'posts:post_delete' pk=post.pk %}">
+                    {% csrf_token %}
+                    <button type="submit" class="button button_like" style="margin-left: -100px;">🗑️</button>
+                </form>
+              </div>
+            {% endif %}
+            <h2 class="impact">{{ post.name }}</h2>
+            <front size="4">{{ post.text }}</front>
+            <hr>
+            <img class="card-img my-2" src="{{ post.img }}">
+            <hr>
+            <form method="post" action="{% url "posts:post_author" post.user %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary" style="margin-left: -700px; margin-right: 105px;">{{ post.user }}</button>
+            </form>
+            <form method="post" action="{% url 'posts:post_detail' post.pk %}">
+                {% csrf_token %}
+                <button method="post" class="button button_3">Подробнее...</button>
+            </form>
+            <br>
+            {% timezone "Europe/Moscow" %}
+            <p class="button_like" style="color: #BDBDBD; font-size: 15px;">{{ post.date|date:"d.m.Y H:i" }}</p>
+            {% endtimezone %}
+        </div>
+        {% if forloop.counter|divisibleby:1 or forloop.last %}
+            </div><div class="card-container button">
+        {% endif %}
+    {% endfor %}
+    {% include 'includes/paginator.html' %}
+</div>
+{% endblock %}

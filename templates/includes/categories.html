@@ -1,0 +1,35 @@
+<nav class="navbar navbar-light" style="background-color: #455A64">
+    <div class="container">
+      {% comment %}
+      Меню - список пунктов со стандартными классами Bootsrap.
+      Класс nav-pills нужен для выделения активных пунктов 
+      {% endcomment %}
+      <ul class="nav nav-pills">
+        {% with request.resolver_match.view_name as view_name %}
+        <li class="nav-item">
+          <a class="button nav-link link-light" 
+             href="{% url 'posts:group_posts' slug="sites" %}">
+             <font size="2">Сайты</font>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="button nav-link link-light" 
+             href="{% url 'posts:group_posts' slug="mobile" %}">
+             <font size="2">Мобильные приложения</font>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="button nav-link link-light" 
+             href="{% url 'posts:group_posts' slug="ii" %}">
+             <font size="2">ИИ</font>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="button nav-link link-light" 
+             href="{% url 'posts:group_posts' slug="money_develop" %}">
+             <font size="2">Комерческая разработка</font>
+          </a>
+        {% endwith %}
+    </div>
+  </nav>
+<hr>
